@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     prediction_default_minutes: int = 15
     map_output_dir: str = 'output'
 
+    llm_model_path: str | None = None
+    llm_temperature: float = 0.2
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

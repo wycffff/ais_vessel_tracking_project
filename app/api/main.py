@@ -10,8 +10,18 @@ from sqlalchemy.orm import Session
 
 from app.db import SessionLocal, get_db
 from app.models import VesselState, VesselTrack
-from app.schemas import VesselPredictionOut, VesselStateOut, VesselTrackOut
+from app.schemas import (
+    AgentQueryIn,
+    AgentQueryOut,
+    McpToolCallIn,
+    McpToolCallOut,
+    VesselPredictionOut,
+    VesselStateOut,
+    VesselTrackOut,
+)
 from app.services.export import tracks_to_csv_buffer
+from app.services.mcp import execute_tool
+from app.services.agent import agent_handle_query
 from app.services.predict import predict_future_position
 from app.settings import get_settings
 
@@ -829,6 +839,16 @@ def realtime_map_data(
     )
     selected_mmsis = _select_current_mmsis(db, filters)
     return _build_payload_for_selected_mmsis(db, selected_mmsis, filters, selection_changed=True)
+
+
+@app.post("/mcp/execute", response_model=McpToolCallOut)
+def mcp_execute(call: McpToolCallIn, db: Session = Depends(get_db)):
+    return execute_tool(db, call.tool_name, call.params)
+
+
+@app.post("/agent/query", response_model=AgentQueryOut)
+def agent_query(query_in: AgentQueryIn, db: Session = Depends(get_db)):
+    return agent_handle_query(query_in.query, db)
 
 
 @app.websocket("/ws/map")

@@ -337,6 +337,67 @@ Use:
 
 to export historical track data for one vessel.
 
+## Testing the Agent and MCP Endpoints
+
+The project now includes an AI agent that can answer natural language queries about vessels using local LLM and database tools. You can test this functionality through the FastAPI interactive documentation.
+
+### How to test
+
+1. **Start the server** (as described in the "How to run the project locally" section):
+
+   ```powershell
+   uvicorn app.api.main:app --reload
+   ```
+
+2. **Open the API documentation**:
+
+   Visit `http://127.0.0.1:8000/docs` in your browser.
+
+3. **Test the Agent Query endpoint**:
+
+   - Expand the `POST /agent/query` section.
+   - Click "Try it out".
+   - In the request body, enter a JSON query like:
+
+     ```json
+     {
+       "query": "玛丽港有哪些船只？"
+     }
+     ```
+
+   - Click "Execute".
+   - Check the response: it should include `tool_used`, `tool_params`, `tool_result`, and a natural language `answer`.
+
+4. **Test the MCP Execute endpoint**:
+
+   - Expand the `POST /mcp/execute` section.
+   - Click "Try it out".
+   - In the request body, enter a JSON call like:
+
+     ```json
+     {
+       "tool_name": "find_vessels_by_port",
+       "params": {
+         "port_name": "玛丽港"
+       }
+     }
+     ```
+
+   - Click "Execute".
+   - Check the response: it should include `tool_name`, `status`, `tool_response`, and `meta`.
+
+### Example queries to try
+
+- `"玛丽港有哪些船只？"` (Find vessels heading to Mariehamn)
+- `"Turku 最近的船是哪一条？"` (Find the nearest vessel to Turku)
+- `"Viking Line 的哪艘船在哪里？"` (Find Viking Line vessels)
+
+### Notes
+
+- The agent uses rule-based tool selection for simplicity, but can be enhanced with LLM-based intent recognition.
+- If no local LLM model is configured, the agent falls back to simple text generation.
+- Ensure the database has vessel data for meaningful results (use demo mode or live mode).
+
 ## Limitations
 
 There are still some limitations in this final version.

@@ -10,5 +10,6 @@ pandas==2.3.2
 numpy==2.3.3
 folium==0.20.0
 geopy==2.4.1
+llama-cpp-python>=0.1.0
 pytest==8.4.2
 httpx==0.28.1

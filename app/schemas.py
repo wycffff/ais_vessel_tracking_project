@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 from pydantic import BaseModel
 
 
@@ -53,3 +54,28 @@ class VesselPredictionOut(BaseModel):
     predicted_lon: float
     predicted_timestamp: datetime
     method: str
+
+
+class McpToolCallIn(BaseModel):
+    tool_name: str
+    params: dict[str, Any] = {}
+
+
+class McpToolCallOut(BaseModel):
+    tool_name: str
+    status: str
+    tool_response: Any
+    meta: dict[str, Any] | None = None
+
+
+class AgentQueryIn(BaseModel):
+    query: str
+
+
+class AgentQueryOut(BaseModel):
+    user_query: str
+    tool_used: str
+    tool_params: dict[str, Any]
+    tool_result: Any
+    answer: str
+    status: str
