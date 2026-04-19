@@ -438,7 +438,7 @@ So even though the prediction itself is simple, the whole system demonstrates an
 
 ## Author
 
-Wei Yechuan, Gong Wenhan，Mackowska Alicja
+Wei Yechuan
 Turku University of Applied Sciences  
 ICT – Data Engineering & AI
 
